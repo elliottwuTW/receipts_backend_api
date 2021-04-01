@@ -8,6 +8,11 @@ exports.checkRegisterInfo = [
   body('passwordConfirm').exists().notEmpty().withMessage('Password-confirmation is required')
 ]
 
+exports.checkLoginInfo = [
+  body('name').exists().notEmpty().withMessage('Name is required'),
+  body('password').exists().notEmpty().withMessage('Password is required')
+]
+
 // custom middleware
 exports.checkUserPassword = [
   body('password').trim()

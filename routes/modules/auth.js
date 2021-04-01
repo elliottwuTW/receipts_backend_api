@@ -2,11 +2,12 @@ const express = require('express')
 const router = express.Router()
 
 // middleware
-const { checkRegisterInfo, checkUserPassword, checkValidation } = require('../../middlewares/validator')
+const { checkRegisterInfo, checkLoginInfo, checkUserPassword, checkValidation } = require('../../middlewares/validator')
 
 // request handler
-const { register } = require('../../controllers/auth')
+const { register, login } = require('../../controllers/auth')
 
 router.post('/register', checkRegisterInfo, checkUserPassword, checkValidation, register)
+router.post('/login', checkLoginInfo, checkValidation, login)
 
 module.exports = router
