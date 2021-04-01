@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
    * Prototype methods
    */
   // get jwt token
-  User.prototype.getJwtToken = () => {
+  User.prototype.getJwtToken = function () {
     const token = jwt.sign({ id: this.id }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRE
     })

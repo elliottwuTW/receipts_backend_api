@@ -13,6 +13,10 @@ exports.checkLoginInfo = [
   body('password').exists().notEmpty().withMessage('Password is required')
 ]
 
+exports.checkTagInfo = [
+  body('title').exists().notEmpty().withMessage('Tag title is required')
+]
+
 // custom middleware
 exports.checkUserPassword = [
   body('password').trim()
