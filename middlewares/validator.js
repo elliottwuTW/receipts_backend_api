@@ -29,6 +29,17 @@ exports.checkUserPassword = [
     })
 ]
 
+// check if resource exist
+exports.ifExist = model => async (req, res, next) => {
+  if (!req.params.id) {
+    return next()
+  }
+  const id = req.params.id
+  const resource = await model.findByPk(id)
+  if (!resource) return next(new ErrorRes(404, `${model.name} with id ${id} does not exist`))
+  next()
+}
+
 // check the validation result
 exports.checkValidation = (req, res, next) => {
   let errors = validationResult(req).errors

@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate (models) {
-      Tag.hasMany(models.Receipt)
+      Tag.hasMany(models.Receipt, { onDelete: 'CASCADE', hooks: true })
       Tag.belongsTo(models.User)
     }
   }
