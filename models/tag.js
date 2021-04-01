@@ -11,12 +11,21 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate (models) {
       Tag.hasMany(models.Receipt)
+      Tag.belongsTo(models.User)
     }
   }
   Tag.init({
     title: {
       allowNull: false,
       type: DataTypes.STRING
+    },
+    UserId: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+      reference: {
+        model: 'Users',
+        key: 'id'
+      }
     }
   }, {
     sequelize,
