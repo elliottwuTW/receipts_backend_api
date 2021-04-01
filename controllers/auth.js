@@ -29,7 +29,8 @@ exports.login = async (req, res, next) => {
     // check user name
     if (!user) return next(new ErrorRes(400, ['User name not found']))
     // check password
-    if (password !== user.password) return next(new ErrorRes(400, ['Please check your password']))
+    const isMatched = await user.comparePassword(password)
+    if (!isMatched) return next(new ErrorRes(400, ['Please check your password']))
 
     // response with JWT
     const token = user.getJwtToken()
