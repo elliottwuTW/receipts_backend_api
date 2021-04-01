@@ -1,5 +1,7 @@
 const { body, validationResult } = require('express-validator')
 
+const ErrorRes = require('../utils/ErrorRes')
+
 exports.checkRegisterInfo = [
   body('name').exists().notEmpty().withMessage('Name is required'),
   body('password').exists().notEmpty().withMessage('Password is required'),
@@ -12,7 +14,7 @@ exports.checkUserPassword = [
     .optional()
     .custom((value, { req }) => {
       if (value !== req.body.passwordConfirm) {
-        throw new Error('Password confirmation does not match')
+        throw new ErrorRes(400, 'Password confirmation does not match')
       }
       return true
     })
@@ -25,6 +27,6 @@ exports.checkValidation = (req, res, next) => {
   if (errors.length === 0) {
     next()
   } else {
-    return next(new Error(errors))
+    return next(new ErrorRes(400, errors))
   }
 }
