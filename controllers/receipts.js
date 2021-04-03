@@ -56,12 +56,47 @@ exports.getReceipts = asyncWrapper(async (req, res, next) => {
 // @route     GET /api/v1/receipts/:id
 // @access    Private
 exports.getReceipt = asyncWrapper(async (req, res, next) => {
-  const receipt = await Receipt.findByPk(req.params.id)
+  const receipt = await Receipt.findByPk(req.params.id, {
+    include: { model: Tag, attributes: ['title'] }
+  })
 
   if (receipt.UserId !== req.user.id) return next(new ErrorRes(403, 'Not authorized to access this receipt'))
 
   return res.status(200).json({
     status: 'success',
     data: receipt
+  })
+})
+
+// @desc      update the tag of a receipt by tagTitle
+// @route     PUT /api/v1/receipts/:id/tag
+// @access    Private
+exports.updateReceiptTag = asyncWrapper(async (req, res, next) => {
+  const receipt = await Receipt.findByPk(req.params.id)
+  if (receipt.UserId !== req.user.id) return next(new ErrorRes(403, 'Not authorized to update this receipt'))
+
+  const tag = await Tag.findOne({ where: { title: req.body.tagTitle } })
+  if (!tag) return next(new ErrorRes(400, `You don't have the tag named ${req.body.tagTitle}. Create a new tag first!`))
+
+  await receipt.update({ TagId: tag.id })
+
+  return res.status(200).json({
+    status: 'success',
+    data: receipt
+  })
+})
+
+// @desc      delete a receipt
+// @route     DELETE /api/v1/receipts/:id
+// @access    Private
+exports.deleteReceipt = asyncWrapper(async (req, res, next) => {
+  const receipt = await Receipt.findByPk(req.params.id)
+  if (receipt.UserId !== req.user.id) return next(new ErrorRes(403, 'Not authorized to delete this receipt'))
+
+  await receipt.destroy()
+
+  return res.status(200).json({
+    status: 'success',
+    data: {}
   })
 })
