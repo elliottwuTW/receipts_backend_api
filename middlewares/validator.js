@@ -17,6 +17,15 @@ exports.checkTagInfo = [
   body('title').exists().notEmpty().withMessage('Tag title is required')
 ]
 
+exports.checkReceiptInfo = [
+  body('tagTitle').exists().notEmpty().withMessage('Tag is required'),
+  body('merchant').exists().notEmpty().withMessage('Merchant is required! Please check your uploaded receipt file'),
+  body('date').exists().notEmpty().withMessage('Date is required! Please check your uploaded receipt file'),
+  body('amount').exists().notEmpty().withMessage('Amount is required! Please check your uploaded receipt file'),
+  body('info').exists().notEmpty().withMessage('info is required! Please check your uploaded receipt file'),
+  body('sn').exists().notEmpty().withMessage('sn is required! Please check your uploaded receipt file')
+]
+
 // custom middleware
 exports.checkUserPassword = [
   body('password').trim()
