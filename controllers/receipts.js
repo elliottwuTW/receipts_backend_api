@@ -24,3 +24,44 @@ exports.createReceipt = asyncWrapper(async (req, res, next) => {
     data: receipt
   })
 })
+
+// @desc      Get all receipts
+// @route     GET /api/v1/receipts
+// @access    Private
+exports.getReceipts = asyncWrapper(async (req, res, next) => {
+  const option = {}
+  // query parameter
+  const { tagTitle } = req.query
+  if (tagTitle) {
+    const tag = await Tag.findOne({ where: { title: tagTitle } })
+    if (tag) option.where = { TagId: tag.id }
+  }
+
+  // get receipts
+  const receipts = await Receipt.findAll({
+    where: {
+      ...option.where,
+      UserId: req.user.id
+    },
+    include: { model: Tag, attributes: ['title'] }
+  })
+
+  return res.status(200).json({
+    status: 'success',
+    data: receipts
+  })
+})
+
+// @desc      Get single receipt
+// @route     GET /api/v1/receipts/:id
+// @access    Private
+exports.getReceipt = asyncWrapper(async (req, res, next) => {
+  const receipt = await Receipt.findByPk(req.params.id)
+
+  if (receipt.UserId !== req.user.id) return next(new ErrorRes(403, 'Not authorized to access this receipt'))
+
+  return res.status(200).json({
+    status: 'success',
+    data: receipt
+  })
+})
