@@ -4,6 +4,9 @@ Backend API server for receipt service
 ### Document
 Check api details in [Receipt REST API](https://receipt-backend-api.herokuapp.com/)
 
+### ER Diagram
+![](https://raw.githubusercontent.com/elliottwuTW/receipts_backend_api/master/public/ERD.png)
+
 ### Spec
 #### Authentication
 - Authenticated by JWT
